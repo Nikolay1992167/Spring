@@ -1,1 +1,22 @@
+#SPRING CONFIGURATION
+spring:
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5432/Spring_Truck
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 87654321
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    show-sql: true
+    database: postgresql
+    open-in-view: false
+    generate-ddl: true
+#SERVER
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
 

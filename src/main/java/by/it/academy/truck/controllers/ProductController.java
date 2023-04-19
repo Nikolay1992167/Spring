@@ -43,4 +43,15 @@ public class ProductController {
     public void deleteProduct(@PathVariable UUID id) {
         productServiceImpl.deleteProduct(id);
     }
+
+    @GetMapping("/products/{location}")
+    public List<ProductResponse> getProductsByLoadingLocation(@PathVariable String location, Pageable pageable) {
+        return productServiceImpl.getProductsByLoadingLocation(location, pageable);
+    }
+
+    @GetMapping("/products/{minWeight}/{maxWeight}")
+    public List<ProductResponse> getProductsByValueWeight(@PathVariable Integer minWeight, @PathVariable Integer maxWeight) {
+        return productServiceImpl.getProductsByValueWeight(minWeight, maxWeight);
+    }
+
 }

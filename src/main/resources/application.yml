@@ -1,5 +1,7 @@
 #SPRING CONFIGURATION
 spring:
+  application:
+    name: Truck
   datasource:
     url: jdbc:postgresql://127.0.0.1:5432/Spring_Truck
     driver-class-name: org.postgresql.Driver
@@ -19,4 +21,11 @@ server:
   error:
     include-message: always
     include-binding-errors: always
+#SERVICES
+services:
+  mail:
+    email: trainingemail@itacademy.by
+    username: itAcademy
+    password: 12345678
+
 

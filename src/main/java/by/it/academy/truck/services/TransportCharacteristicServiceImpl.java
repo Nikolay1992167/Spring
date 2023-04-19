@@ -20,10 +20,8 @@ public class TransportCharacteristicServiceImpl implements TransportCharacterist
 
     private final TransportCharacteristicRepository transportCharacteristicRepository;
 
-
     @Override
     public TransportCharacteristicResponse getTransportCharacteristic(Integer id) {
-        log.info("In TransportCharacteristicServiceImpl getTransportCharacteristic{}", id);
         return transportCharacteristicRepository.findById(id)
                 .map(transportCharacteristicMapper::buildTransportCharacteristicResponseResponse)
                 .get();
@@ -31,7 +29,6 @@ public class TransportCharacteristicServiceImpl implements TransportCharacterist
 
     @Override
     public List<TransportCharacteristicResponse> getTransportCharacteristics(Pageable pageable) {
-        log.info("In TransportCharacteristicServiceImpl getTransportCharacteristics");
         return transportCharacteristicRepository.findAll(pageable).stream()
                 .map(transportCharacteristicMapper::buildTransportCharacteristicResponseResponse)
                 .collect(Collectors.toList());

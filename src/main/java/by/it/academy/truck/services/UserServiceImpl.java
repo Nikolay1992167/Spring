@@ -4,7 +4,7 @@ import by.it.academy.truck.dto.UserRequest;
 import by.it.academy.truck.dto.UserResponse;
 import by.it.academy.truck.dto.UserUpdateRequest;
 import by.it.academy.truck.entities.User;
-import by.it.academy.truck.exceptions.UserNotFoundException;
+import by.it.academy.truck.exceptions.ResourceNotFoundException;
 import by.it.academy.truck.mapper.UserMapper;
 import by.it.academy.truck.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,15 +26,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     public UserResponse getUser(UUID id) {
-        log.info("In UserServiceImpl getUser{}", id);
         return userRepository.findById(id)
                 .map(userMapper::buildUserResponse)
-                .orElseThrow(()-> new UserNotFoundException(String.format("Can not find user with id %s", id)));
+                .orElseThrow(()-> new ResourceNotFoundException(String.format("Can not find user with id %s", id)));
     }
 
     @Override
     public UserResponse createUser(UserRequest userRequest) {
-        log.info("In UserServiceImpl createUser{}", userRequest);
         User user = userMapper.buildUser(userRequest);
         User savedUser = userRepository.save(user);
         return userMapper.buildUserResponse(savedUser);
@@ -42,7 +40,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserResponse> getUsers(Pageable pageable) {
-        log.info("In UserServiceImpl getUsers");
         return userRepository.findAll(pageable).stream()
                 .map(userMapper::buildUserResponse)
                 .collect(Collectors.toList());
@@ -50,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(UserUpdateRequest userUpdateRequest) {
-            User updateUser = userRepository.findById(userUpdateRequest.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid user Id"));
+            User updateUser = userRepository.findById(userUpdateRequest.getId()).orElseThrow(() -> new ResourceNotFoundException(String.format("Not find user.")));
             updateUser.setUserName(userUpdateRequest.getUserName());
             updateUser.setPassword(userUpdateRequest.getPassword());
             updateUser.setEmail(userUpdateRequest.getEmail());
@@ -62,7 +59,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(UUID id) {
-        log.info("In UserServiceImpl deleteUser{}", id);
         userRepository.deleteById(id);
     }
 }

@@ -19,4 +19,8 @@ public interface ProductService {
     void updateProduct(ProductUpdateRequest productUpdateRequest);
 
     void deleteProduct(UUID id);
+
+    List<ProductResponse> getProductsByLoadingLocation(String loadingLocation, Pageable pageable);
+
+    List<ProductResponse> getProductsByValueWeight(Integer minWeight, Integer maxWeight);
 }

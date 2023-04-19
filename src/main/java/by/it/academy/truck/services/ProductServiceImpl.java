@@ -6,6 +6,7 @@ import by.it.academy.truck.dto.ProductUpdateRequest;
 import by.it.academy.truck.dto.TransportCharacteristicRequest;
 import by.it.academy.truck.entities.Product;
 import by.it.academy.truck.entities.TransportCharacteristic;
+import by.it.academy.truck.exceptions.ResourceNotFoundException;
 import by.it.academy.truck.mapper.ProductMapper;
 import by.it.academy.truck.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,15 +29,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse getProduct(UUID id) {
-        log.info("In ProductServiceImpl getProduct{}", id);
         return productRepository.findById(id)
                 .map(productMapper::buildProductResponse)
-                .get();
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Can not find product with id %s", id)));
     }
 
     @Override
     public ProductResponse createProduct(ProductRequest productRequest) {
-        log.info("In ProductServiceImpl createProduct{}", productRequest);
         Product product = productMapper.buildProduct(productRequest);
         Product saveProduct = productRepository.save(product);
         return productMapper.buildProductResponse(saveProduct);
@@ -44,7 +43,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResponse> getProducts(Pageable pageable) {
-        log.info("In ProductServiceImpl getProducts");
         return productRepository.findAll(pageable).stream()
                 .map(productMapper::buildProductResponse)
                 .collect(Collectors.toList());
@@ -52,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void updateProduct(ProductUpdateRequest productUpdateRequest) {
-        Product updateProduct = productRepository.findById(productUpdateRequest.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid product Id"));
+        Product updateProduct = productRepository.findById(productUpdateRequest.getId()).orElseThrow(() -> new ResourceNotFoundException(String.format("Not find product.")));
         updateProduct.setName(productUpdateRequest.getName());
         updateProduct.setCargoCost(productUpdateRequest.getCargoCost());
         updateProduct.setWeight(productUpdateRequest.getWeight());
@@ -64,7 +62,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(UUID id) {
-        log.info("In ProductServiceImpl deleteProduct{}", id);
         productRepository.deleteById(id);
     }
 
@@ -74,5 +71,18 @@ public class ProductServiceImpl implements ProductService {
                 .name(transportCharacteristicRequest.getName())
                 .volumeFactor(transportCharacteristicRequest.getVolumeFactor())
                 .build();
+    }
+    @Override
+    public List<ProductResponse> getProductsByLoadingLocation(String location, Pageable pageable){
+        return productRepository.findByLoadingLocation(location, pageable).stream()
+                .map(productMapper::buildProductResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductResponse> getProductsByValueWeight(Integer minWeight, Integer maxWeight) {
+        return productRepository.findByWeightGreaterThanEqualAndWeightLessThanEqual(minWeight, maxWeight).stream()
+                .map(productMapper::buildProductResponse)
+                .collect(Collectors.toList());
     }
 }

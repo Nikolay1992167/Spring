@@ -1,7 +1,7 @@
 package by.it.academy.truck.controllers;
 
 import by.it.academy.truck.dto.ErrorResponse;
-import by.it.academy.truck.exceptions.UserNotFoundException;
+import by.it.academy.truck.exceptions.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,9 +14,9 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class ExceptionHandlerController {
 
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleUserNotFoundException(UserNotFoundException exception) {
+    public ErrorResponse handleResourceNotFoundException(ResourceNotFoundException exception) {
         log.warn("EXCEPTION. {}", exception.getMessage());
         return new ErrorResponse(exception.getMessage(), LocalDateTime.now());
     }

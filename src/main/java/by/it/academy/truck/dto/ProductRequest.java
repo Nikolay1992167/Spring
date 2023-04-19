@@ -1,6 +1,5 @@
 package by.it.academy.truck.dto;
 
-import by.it.academy.truck.entities.TransportCharacteristic;
 import lombok.Builder;
 import lombok.Data;
 

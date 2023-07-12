@@ -8,11 +8,9 @@ import by.it.academy.truck.entities.Product;
 import by.it.academy.truck.entities.TransportCharacteristic;
 import lombok.Builder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Builder
-@Transactional
 public class ProductMapper {
     public ProductResponse buildProductResponse(Product product) {
         return ProductResponse.builder()

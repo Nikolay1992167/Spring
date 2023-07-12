@@ -19,7 +19,7 @@ public class ProductController {
 
     private final ProductService productServiceImpl;
 
-    @GetMapping("/products/{id}")
+    @GetMapping(path = "/products/{id}", consumes="application/json")
     public ProductResponse getProduct(@PathVariable UUID id) {
         return productServiceImpl.getProduct(id);
     }
@@ -53,5 +53,4 @@ public class ProductController {
     public List<ProductResponse> getProductsByValueWeight(@PathVariable Integer minWeight, @PathVariable Integer maxWeight) {
         return productServiceImpl.getProductsByValueWeight(minWeight, maxWeight);
     }
-
 }

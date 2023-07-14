@@ -1,5 +1,10 @@
-FROM maven:3.8.1-jdk-11-openj9
+FROM maven:3.8.1-jdk-11-openj9 as builder
 WORKDIR /app
-COPY target/Truck-0.0.1-SNAPSHOT.jar .
+COPY . /app/.
+RUN mvn -f /app/pom.xml clean package -Dmaven.test.skip=true
+
+FROM eclipse-temurin:11.0.17_8-jre
+WORKDIR /app
+COPY --from=builder /app/target/*.jar /app/*.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","Truck-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "/app/*.jar"]
